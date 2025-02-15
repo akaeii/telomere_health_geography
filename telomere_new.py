@@ -1,9 +1,11 @@
 import pandas as pd
 import numpy as np
+from sklearn.svm import LinearSVC
 from sklearn.linear_model import SGDRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import train_test_split, GridSearchCV
 import warnings
 
@@ -129,25 +131,43 @@ def train_model(df):
     X = df
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
-    model = make_pipeline(StandardScaler(), SGDRegressor())
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.fit_transform(X_test)
+    model = SGDRegressor(average=True)
 
-    model.fit(X_train, y_train)
+    model.fit(X_train_scaled, y_train)
+    # y_test_pred = model.predict(X_test)
 
-    y_test_pred = model.predict(X_test)
+    # comparison = pd.DataFrame({"Dataset": y_test, "Predicted": y_test_pred})
+    # print(comparison.head(20))
 
-    comparison = pd.DataFrame({"Dataset": y_test, "Predicted": y_test_pred})
-    print(comparison.head(20))
+    # print("R^2 score:", model.score(X_test, y_test))
+    # print("MSE:", mean_squared_error(y_test, y_test_pred))
+    # print("MAE:", mean_absolute_error(y_test, y_test_pred))
 
-    print("R^2 score:", model.score(X_test, y_test))
-    print("MSE:", mean_squared_error(y_test, y_test_pred))
-    print("MAE:", mean_absolute_error(y_test, y_test_pred))
+    selector = SelectFromModel(model, threshold="mean", prefit=True)
+
+    selected_features = X_train.columns[selector.get_support()]
+    print(f"Selected Features: {list(selected_features)}")
+
+    X_train_selected = selector.transform(X_train_scaled)
+    X_test_selected = selector.transform(X_test_scaled)
+
+    X_train_selected = pd.DataFrame(X_train_selected, columns=selected_features)
+    X_test_selected = pd.DataFrame(X_test_selected, columns=selected_features)
+
+    sgd_selected = SGDRegressor()
+    sgd_selected.fit(X_train_selected, y_train)
+
+    baseline_score = model.score(X_test_scaled, y_test)
+    selected_score = sgd_selected.score(X_test_selected, y_test)
+
+    print(f"Baseline R²: {baseline_score:.4f}")
+    print(f"Selected Features R²: {selected_score:.4f}")
 
 
 if __name__ == "__main__":
     df = read_data()
     df_preprocessed = preprocess_data(df)
     train_model(df_preprocessed)
-
-    # print(df_preprocessed.isnull().sum().sum())
-    # df_preprocessed.to_csv("telomere_preprocessed.csv", index=None)
-    # df_preprocessed[df.isna().any(axis=1)].to_csv("na_data.csv", index=None)
