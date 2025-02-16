@@ -13,7 +13,7 @@ warnings.simplefilter(action="ignore", category=FutureWarning)
 
 
 def read_data():
-    df = pd.read_csv("./input/telomere_new.csv")
+    df = pd.read_csv("./input/telomere_geography_health.csv")
     df = df.drop(
         columns=[
             "socioeconomic_status",
