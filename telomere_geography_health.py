@@ -1,11 +1,14 @@
 import pandas as pd
 import numpy as np
 from sklearn.svm import LinearSVC
-from sklearn.linear_model import SGDRegressor
+
+# from sklearn.linear_model import ElasticNet, SGDRegressor
+
+from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.feature_selection import SelectFromModel
+from sklearn.feature_selection import SelectFromModel, VarianceThreshold
 from sklearn.model_selection import train_test_split, GridSearchCV
 import warnings
 
@@ -24,102 +27,114 @@ def read_data():
             "cardiovascular_disease_diagnosis",
             "allergy_disease_diagnosis",
         ]
-    )  # find a way to include?
+    )
     return df
 
 
+def categorical_to_numeric(df, column, mapping, regex=False):
+    df[column] = df[column].replace(mapping, regex=regex)
+
+
+def fill_na(column, default):
+    fill_value = np.nan
+    if default == "median":
+        fill_value = df[column].median()
+    elif default == "mode":
+        fill_value = df[column].mode()[0]
+
+    df[column] = df[column].fillna(fill_value)
+
+
 def preprocess_data(df):
-    cigarette_smoking_mapping = {
-        "No information": np.nan,
-        "Former Smoker": np.nan,
-        "Never Smoker": 0,
-        "Occasional Smoker": 1,
-        "Regular Smoker": 2,
-    }
 
-    df["cigarette_smoking"] = df["cigarette_smoking"].replace(cigarette_smoking_mapping)
-
-    physical_activity_mapping = {
-        "No information": np.nan,
-        "Sedentary (Inactive)": 0,
-        "Minimally Active": 1,
-        "Lightly Active": 2,
-        "Moderately Active": 3,
-        "Highly Active": 4,
-    }
-
-    df["physical_activity_cohort"] = df["physical_activity_cohort"].replace(
-        physical_activity_mapping
+    categorical_to_numeric(
+        df,
+        "cigarette_smoking",
+        {
+            "No information": np.nan,
+            "Former Smoker": np.nan,
+            "Never Smoker": 0,
+            "Occasional Smoker": 1,
+            "Regular Smoker": 2,
+        },
     )
 
-    alcohol_drinking_mapping = {
-        "No information": np.nan,
-        "Former Drinker": np.nan,
-        "Never Drinker": 0,
-        "Occasional Drinker": 1,
-        "Moderate Drinker": 2,
-        "Heavy Drinker": 3,
-    }
+    categorical_to_numeric(
+        df,
+        "physical_activity_cohort",
+        {
+            "No information": np.nan,
+            "Sedentary (Inactive)": 0,
+            "Minimally Active": 1,
+            "Lightly Active": 2,
+            "Moderately Active": 3,
+            "Highly Active": 4,
+        },
+    )
 
-    df["alcohol_drinking"] = df["alcohol_drinking"].replace(alcohol_drinking_mapping)
+    categorical_to_numeric(
+        df,
+        "alcohol_drinking",
+        {
+            "No information": np.nan,
+            "Former Drinker": np.nan,
+            "Never Drinker": 0,
+            "Occasional Drinker": 1,
+            "Moderate Drinker": 2,
+            "Heavy Drinker": 3,
+        },
+    )
 
-    education_cohort_mapping = {
-        "No information": np.nan,
-        "Elementary Graduate": 0,
-        "High School Graduate": 1,
-        "College Undergraduate": 2,
-        "Vocational Graduate": 3,
-        "College Graduate": 4,
-        "Postgraduate (Master's or Doctorate)": 5,
-    }
+    categorical_to_numeric(
+        df,
+        "education_cohort",
+        {
+            "No information": np.nan,
+            "Elementary Graduate": 0,
+            "High School Graduate": 1,
+            "College Undergraduate": 2,
+            "Vocational Graduate": 3,
+            "College Graduate": 4,
+            "Postgraduate (Master's or Doctorate)": 5,
+        },
+    )
 
-    df["education_cohort"] = df["education_cohort"].replace(education_cohort_mapping)
+    categorical_to_numeric(
+        df,
+        "bp_category",
+        {
+            "No information": np.nan,
+            "Hypotension (Low BP)": 0,
+            "Normal BP": 1,
+            "Elevated BP": 2,
+            "Hypertension Stage 1": 3,
+            "Hypertension Stage 2": 4,
+            "Hypertensive Crisis": 5,
+        },
+    )
 
-    bp_category_mapping = {
-        "No information": np.nan,
-        "Hypotension (Low BP)": 0,
-        "Normal BP": 1,
-        "Elevated BP": 2,
-        "Hypertension Stage 1": 3,
-        "Hypertension Stage 2": 4,
-        "Hypertensive Crisis": 5,
-    }
-
-    df["bp_category"] = df["bp_category"].replace(bp_category_mapping)
-
-    health_condition_mapping = {
-        "^Clinically healthy*": 0,
-        "^Single.*": 1,
-        "^Multi.*": 2,
-    }
-    df["health_condition"] = df["health_condition"].replace(
-        health_condition_mapping, regex=True
+    categorical_to_numeric(
+        df,
+        "health_condition",
+        {
+            "^Clinically healthy*": 0,
+            "^Single.*": 1,
+            "^Multi.*": 2,
+        },
+        regex=True,
     )
 
     df["hr"] = pd.to_numeric(df["hr"], errors="coerce")
     df["rr"] = pd.to_numeric(df["rr"], errors="coerce")
 
-    df["hr"] = df["hr"].fillna(df["hr"].median())
-    df["rr"] = df["rr"].fillna(df["rr"].median())
-    df["bmi"] = df["bmi"].fillna(df["bmi"].median())
-
-    df["education_cohort"] = df["education_cohort"].fillna(
-        df["education_cohort"].mode()[0]
-    )
-
-    df["alcohol_drinking"] = df["alcohol_drinking"].fillna(
-        df["alcohol_drinking"].mode()[0]
-    )
-
-    df["cigarette_smoking"] = df["cigarette_smoking"].fillna(
-        df["cigarette_smoking"].mode()[0]
-    )
-
-    df["bp_category"] = df["bp_category"].fillna(df["bp_category"].mode()[0])
-
-    df["physical_activity_cohort"] = df["physical_activity_cohort"].fillna(
-        df["physical_activity_cohort"].mode()[0]
-    )
+    fill_na("hr", "median")
+    fill_na("rr", "median")
+    fill_na("bmi", "median")
+    fill_na("education_cohort", "mode")
+    fill_na("alcohol_drinking", "mode")
+    fill_na("cigarette_smoking", "mode")
+    fill_na("bp_category", "mode")
+    fill_na("physical_activity_cohort", "mode")
 
     df = pd.get_dummies(df, columns=["rural_or_urban", "sex", "marital_status"])
 
@@ -129,42 +144,33 @@ def preprocess_data(df):
 def train_model(df):
     y = df.pop("telomere_length")
     X = df
+    lasso_params = {"alpha": [0.3, 1, 1.3, 2, 3]}
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.fit_transform(X_test)
-    model = SGDRegressor(average=True)
+    selector = VarianceThreshold(threshold=(0.8 * (1 - 0.8)))
+    X = selector.fit_transform(X)
 
-    model.fit(X_train_scaled, y_train)
-    # y_test_pred = model.predict(X_test)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+    pipeline = make_pipeline(
+        StandardScaler(), GridSearchCV(linear_model.Lasso(), param_grid=lasso_params)
+    )
 
-    # comparison = pd.DataFrame({"Dataset": y_test, "Predicted": y_test_pred})
-    # print(comparison.head(20))
+    pipeline.fit(X_train, y_train)
+    score = pipeline.score(X_test, y_test)
+    print(score)
+    # feature_coefficients = pd.DataFrame(
+    #     {"features": selector.get_feature_names_out()},
+    #     index=pipeline["lasso"].coef_,
+    # )
 
-    # print("R^2 score:", model.score(X_test, y_test))
-    # print("MSE:", mean_squared_error(y_test, y_test_pred))
-    # print("MAE:", mean_absolute_error(y_test, y_test_pred))
+    # print(feature_coefficients)
 
-    selector = SelectFromModel(model, threshold="mean", prefit=True)
+    # print(pipeline["gridsearchcv"].cv_results_)
+    results_df = pd.DataFrame(pipeline["gridsearchcv"].cv_results_)
+    print(results_df)
+    print(pipeline["gridsearchcv"].best_estimator_, pipeline["gridsearchcv"].best_params_)
 
-    selected_features = X_train.columns[selector.get_support()]
-    print(f"Selected Features: {list(selected_features)}")
-
-    X_train_selected = selector.transform(X_train_scaled)
-    X_test_selected = selector.transform(X_test_scaled)
-
-    X_train_selected = pd.DataFrame(X_train_selected, columns=selected_features)
-    X_test_selected = pd.DataFrame(X_test_selected, columns=selected_features)
-
-    sgd_selected = SGDRegressor()
-    sgd_selected.fit(X_train_selected, y_train)
-
-    baseline_score = model.score(X_test_scaled, y_test)
-    selected_score = sgd_selected.score(X_test_selected, y_test)
-
-    print(f"Baseline R²: {baseline_score:.4f}")
-    print(f"Selected Features R²: {selected_score:.4f}")
+    # remove selector and run this for all assigned coefs:
+    # print(dict(zip(X.columns, pipeline["sgdregressor"].coef_)))
 
 
 if __name__ == "__main__":
