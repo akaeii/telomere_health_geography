@@ -24,8 +24,7 @@ def read_data():
             "bmi_category",
             "hr_category",
             "rr_category",
-            "cardiovascular_disease_diagnosis",
-            "allergy_disease_diagnosis",
+            "health_condition",
         ]
     )
     return df
@@ -115,11 +114,23 @@ def preprocess_data(df):
 
     categorical_to_numeric(
         df,
-        "health_condition",
+        "cardiovascular_disease_diagnosis",
         {
-            "^Clinically healthy*": 0,
+            "^No known*": 0,
+            "^Non-cardiovascular*": 0,
             "^Single.*": 1,
-            "^Multi.*": 2,
+            "^Multi.*": 1,
+        },
+        regex=True,
+    )
+
+    categorical_to_numeric(
+        df,
+        "allergy_disease_diagnosis",
+        {
+            "^No Diagnosed*": 0,
+            "^Single.*": 1,
+            "^Multi.*": 1,
         },
         regex=True,
     )
@@ -142,35 +153,38 @@ def preprocess_data(df):
 
 
 def train_model(df):
-    y = df.pop("telomere_length")
+    y = df.pop("cardiovascular_disease_diagnosis")
     X = df
-    lasso_params = {"alpha": [0.3, 1, 1.3, 2, 3]}
+
+    lsvc_params = {
+        "penalty": [
+            "l2",
+        ],
+        "loss": ["squared_hinge"],
+    }
 
     selector = VarianceThreshold(threshold=(0.8 * (1 - 0.8)))
     X = selector.fit_transform(X)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+
     pipeline = make_pipeline(
-        StandardScaler(), GridSearchCV(linear_model.Lasso(), param_grid=lasso_params)
+        StandardScaler(),
+        # GridSearchCV(LinearSVC(random_state=0, tol=1e-5), param_grid=lsvc_params),
+        LinearSVC(tol=1e-5),
     )
 
     pipeline.fit(X_train, y_train)
     score = pipeline.score(X_test, y_test)
-    print(score)
-    # feature_coefficients = pd.DataFrame(
-    #     {"features": selector.get_feature_names_out()},
-    #     index=pipeline["lasso"].coef_,
+    print(f"SCORE: {score}")
+
+    y_pred = pipeline.predict(X_test)
+    prediction = pd.DataFrame({"test": y_test, "pred": y_pred})
+    print(prediction.head(20))
+
+    # print(
+    #     pipeline["gridsearchcv"].best_estimator_, pipeline["gridsearchcv"].best_params_
     # )
-
-    # print(feature_coefficients)
-
-    # print(pipeline["gridsearchcv"].cv_results_)
-    results_df = pd.DataFrame(pipeline["gridsearchcv"].cv_results_)
-    print(results_df)
-    print(pipeline["gridsearchcv"].best_estimator_, pipeline["gridsearchcv"].best_params_)
-
-    # remove selector and run this for all assigned coefs:
-    # print(dict(zip(X.columns, pipeline["sgdregressor"].coef_)))
 
 
 if __name__ == "__main__":
