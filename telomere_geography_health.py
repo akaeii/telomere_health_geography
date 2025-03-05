@@ -156,35 +156,38 @@ def train_model(df):
     y = df.pop("cardiovascular_disease_diagnosis")
     X = df
 
-    lsvc_params = {
-        "penalty": [
-            "l2",
-        ],
-        "loss": ["squared_hinge"],
-    }
-
-    selector = VarianceThreshold(threshold=(0.8 * (1 - 0.8)))
-    X = selector.fit_transform(X)
-
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
-    pipeline = make_pipeline(
-        StandardScaler(),
-        # GridSearchCV(LinearSVC(random_state=0, tol=1e-5), param_grid=lsvc_params),
-        LinearSVC(tol=1e-5),
+    selector = VarianceThreshold(threshold=(0.8 * (1 - 0.8)))
+    X_train_selected = selector.fit_transform(X_train)
+    X_test_selected = selector.transform(X_test)
+
+    pipeline = make_pipeline(StandardScaler(), LinearSVC(tol=1e-5))
+    pipeline.fit(X_train_selected, y_train)
+
+    score = pipeline.score(X_test_selected, y_test)
+    confidence_scores = pipeline.decision_function(X_test_selected)
+
+    y_prediction = pipeline.predict(X_test_selected)
+    prediction_df = pd.DataFrame(
+        data={
+            "Actual": y_test.reset_index(drop=True).map({1: "Present", 0: "Absent"}),
+            "Predicted": pd.Series(y_prediction)
+            .reset_index(drop=True)
+            .map({1: "Present", 0: "Absent"}),
+            "Conf. Score": confidence_scores,
+            "Match": pd.Series((y_prediction == y_test).astype(bool))
+            .reset_index(drop=True)
+            .map({True: "Correct", False: "Incorrect"}),
+        }
     )
 
-    pipeline.fit(X_train, y_train)
-    score = pipeline.score(X_test, y_test)
-    print(f"SCORE: {score}")
+    print(f"Score: {score}")
+    print(prediction_df)
 
-    y_pred = pipeline.predict(X_test)
-    prediction = pd.DataFrame({"test": y_test, "pred": y_pred})
-    print(prediction.head(20))
 
-    # print(
-    #     pipeline["gridsearchcv"].best_estimator_, pipeline["gridsearchcv"].best_params_
-    # )
+def export_model():
+    return
 
 
 if __name__ == "__main__":
