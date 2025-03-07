@@ -2,12 +2,9 @@ import pandas as pd
 import numpy as np
 from sklearn.svm import LinearSVC
 
-# from sklearn.linear_model import ElasticNet, SGDRegressor
-
-from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import SelectFromModel, VarianceThreshold
 from sklearn.model_selection import train_test_split, GridSearchCV
 import warnings
@@ -34,7 +31,7 @@ def categorical_to_numeric(df, column, mapping, regex=False):
     df[column] = df[column].replace(mapping, regex=regex)
 
 
-def fill_na(column, default):
+def fill_na(df, column, default):
     fill_value = np.nan
     if default == "median":
         fill_value = df[column].median()
@@ -138,14 +135,14 @@ def preprocess_data(df):
     df["hr"] = pd.to_numeric(df["hr"], errors="coerce")
     df["rr"] = pd.to_numeric(df["rr"], errors="coerce")
 
-    fill_na("hr", "median")
-    fill_na("rr", "median")
-    fill_na("bmi", "median")
-    fill_na("education_cohort", "mode")
-    fill_na("alcohol_drinking", "mode")
-    fill_na("cigarette_smoking", "mode")
-    fill_na("bp_category", "mode")
-    fill_na("physical_activity_cohort", "mode")
+    fill_na(df, "hr", "median")
+    fill_na(df, "rr", "median")
+    fill_na(df, "bmi", "median")
+    fill_na(df, "education_cohort", "mode")
+    fill_na(df, "alcohol_drinking", "mode")
+    fill_na(df, "cigarette_smoking", "mode")
+    fill_na(df, "bp_category", "mode")
+    fill_na(df, "physical_activity_cohort", "mode")
 
     df = pd.get_dummies(df, columns=["rural_or_urban", "sex", "marital_status"])
 
@@ -182,12 +179,10 @@ def train_model(df):
         }
     )
 
-    print(f"Score: {score}")
+    prediction_df["Accuracy"] = pd.Series(score)
+
     print(prediction_df)
-
-
-def export_model():
-    return
+    prediction_df.to_csv("./output/prediction_report.csv", index=False)
 
 
 if __name__ == "__main__":
