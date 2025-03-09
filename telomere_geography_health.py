@@ -1,9 +1,10 @@
 import pandas as pd
 import numpy as np
 from sklearn.svm import LinearSVC
+import pickle
 
 from sklearn.metrics import mean_squared_error, mean_absolute_error
-from sklearn.pipeline import make_pipeline
+from sklearn.pipeline import make_pipeline, Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import SelectFromModel, VarianceThreshold
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -145,7 +146,7 @@ def preprocess_data(df):
     fill_na(df, "physical_activity_cohort", "mode")
 
     df = pd.get_dummies(df, columns=["rural_or_urban", "sex", "marital_status"])
-
+    df.to_csv("preprocessed.csv", index=False)
     return df
 
 
@@ -156,7 +157,7 @@ def train_model(df):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
     selector = VarianceThreshold(threshold=(0.8 * (1 - 0.8)))
-    X_train_selected = selector.fit_transform(X_train)
+    X_train_selected = pd.DataFrame(selector.fit_transform(X_train))
     X_test_selected = selector.transform(X_test)
 
     pipeline = make_pipeline(StandardScaler(), LinearSVC(tol=1e-5))
@@ -184,8 +185,19 @@ def train_model(df):
     print(prediction_df)
     prediction_df.to_csv("./output/prediction_report.csv", index=False)
 
+    selected_features = X_train.columns[selector.get_support()]
+    print(pd.Series(selected_features))
+
+    return pipeline
+
+
+def export_model(pipeline: Pipeline) -> None:  # pickle just model or entire pipeline?
+    with open("telomere_geography_health.pkl", "wb") as model_file:
+        pickle.dump(pipeline, model_file)
+
 
 if __name__ == "__main__":
     df = read_data()
     df_preprocessed = preprocess_data(df)
-    train_model(df_preprocessed)
+    pipeline = train_model(df_preprocessed)
+    export_model(pipeline)
