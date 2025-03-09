@@ -160,6 +160,13 @@ def train_model(df):
     X_train_selected = pd.DataFrame(selector.fit_transform(X_train))
     X_test_selected = selector.transform(X_test)
 
+    selected_features = X_train.columns[selector.get_support()]
+    selected_variances = selector.variances_[selector.get_support()]
+
+    feature_variances = pd.DataFrame(
+        data={"Selected Features": selected_features, "Variances": selected_variances}
+    )
+
     pipeline = make_pipeline(StandardScaler(), LinearSVC(tol=1e-5))
     pipeline.fit(X_train_selected, y_train)
 
@@ -182,13 +189,7 @@ def train_model(df):
 
     prediction_df["Accuracy"] = pd.Series(score)
 
-    print(prediction_df)
-    prediction_df.to_csv("./output/prediction_report.csv", index=False)
-
-    selected_features = X_train.columns[selector.get_support()]
-    print(pd.Series(selected_features))
-
-    return pipeline
+    return (pipeline, feature_variances, prediction_df.fillna(""))
 
 
 def export_model(pipeline: Pipeline) -> None:  # pickle just model or entire pipeline?
@@ -199,5 +200,8 @@ def export_model(pipeline: Pipeline) -> None:  # pickle just model or entire pip
 if __name__ == "__main__":
     df = read_data()
     df_preprocessed = preprocess_data(df)
-    pipeline = train_model(df_preprocessed)
-    export_model(pipeline)
+    pipeline, feature_variances, prediction_df = train_model(df_preprocessed)
+
+    print(feature_variances)
+    print(prediction_df)
+    # export_model(pipeline)
