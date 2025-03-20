@@ -1,0 +1,5 @@
+Prediction Model,5-Fold Accuracy
+CVD,0.752299245024022
+Depression/Anxiety,0.987211164493251
+Diabetes,0.9444520704644246
+Allergy,0.8846259437199725
