@@ -1,0 +1,23 @@
+digraph G {
+	overlap=scale splines=true
+	edge [fontsize=12]
+	node [fillcolor="#cae6df" shape=circle style=filled]
+	node [shape=box style=""]
+	telomere_length [label=telomere_length]
+	age [label=age]
+	alcohol_drinking [label=alcohol_drinking]
+	bmi [label=bmi]
+	bp_category [label=bp_category]
+	cigarette_smoking [label=cigarette_smoking]
+	hr [label=hr]
+	physical_activity_cohort [label=physical_activity_cohort]
+	rr [label=rr]
+	age -> telomere_length [label=""]
+	cigarette_smoking -> telomere_length [label=""]
+	alcohol_drinking -> telomere_length [label=""]
+	physical_activity_cohort -> telomere_length [label=""]
+	bmi -> telomere_length [label=""]
+	hr -> telomere_length [label=""]
+	rr -> telomere_length [label=""]
+	bp_category -> telomere_length [label=""]
+}

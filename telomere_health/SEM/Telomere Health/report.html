@@ -1,0 +1,1850 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Georgy Meshcheryakov">
+    <title>Telomere Health: Report</title>
+
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/semopy.css" rel="stylesheet">
+    <script src="./js/bootstrap.min.js"></script>
+    <style>nav .nav-link {
+    color: black;
+}
+nav .nav-link:hover {
+    color: grey;
+}
+nav .nav-link.active {
+    color: grey;
+}</style>
+
+
+  </head>
+  <body>
+<br><br>
+<div class="container-fluid">
+	<div class="row">
+	<div class="col-sm-8">
+	<h2 style="display:inline">Report: Telomere Health</h2>
+	</div>
+</div>
+<div class="container-fluid" >
+  <div class="row">
+    <div class="col-sm-2">
+     <br>
+     <div class="sticky-top">
+      <nav class="nav flex-column" >
+        <a class="p-1 nav-link active" id="model_m" href="#model">Model information</a>
+        <a class="p-1 nav-link" id="estimates_m" href="#estimates">Estimates</a>
+        <a class="p-1 nav-link" id="indices_m" href="#indices">Fit indices</a>
+	<a class="p-1 nav-link" id="matrices_m" href="#matrices">Matrices</a>
+      </nav>
+     </div>
+    </div>
+    <div class="col-sm-9" style="border-left: 1px solid">
+     <br>
+	<a class="anchor" id="model"></a>
+	<h3>Model information</h3>
+		<div class="row">
+		<div class="col-sm-4">Model class:</div><div class="col-sm-2"><span style="background-color: #f6f8fa; font-family: monospace;">Model</span></div>
+		</div>
+		<div class="row">
+		<div class="col-sm-4">Number of samples:</div><div class="col-sm-2">615</div>
+		</div>
+		<div class="row">
+		<div class="col-sm-4">Objective function:</div><div class="col-sm-2">WLS</div>
+		</div>
+		<div class="row">
+		<div class="col-sm-4">Converged:</div><div class="col-sm-2 text-success">Yes</div>
+		</div>
+		<br>
+		Description in <b>semopy</b> syntax:
+		<div class="col-sm-9" style="background-color: #f6f8fa;max-width: 100%;width: 100%;border: 1px solid">
+		<pre style="font-family: monospace">telomere_length ~ age + cigarette_smoking + alcohol_drinking + physical_activity_cohort + bmi + hr + rr + bp_category</pre>
+		</div>
+		<br>
+		<div class="accordion" id="accordion1">
+		<div class="accordion-item">
+	    <h2 class="accordion-header" id="headingOne">
+	      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+		Variables classification
+	      </button>
+	    </h2>
+	    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordion1">
+	      <div class="accordion-body">
+		<div class="row"><div class="col-sm-2">all</div><div class="col-sm-6">age, physical_activity_cohort, rr, bmi, telomere_length, cigarette_smoking, bp_category, alcohol_drinking, hr</div></div><div class="row"><div class="col-sm-2">endogenous</div><div class="col-sm-6">telomere_length</div></div><div class="row"><div class="col-sm-2">exogenous</div><div class="col-sm-6">age, physical_activity_cohort, rr, bmi, cigarette_smoking, bp_category, alcohol_drinking, hr</div></div><div class="row"><div class="col-sm-2">observed</div><div class="col-sm-6">telomere_length, age, alcohol_drinking, bmi, bp_category, cigarette_smoking, hr, physical_activity_cohort, rr</div></div><div class="row"><div class="col-sm-2">latent</div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-2">indicator</div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-2">output</div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-2">_output</div><div class="col-sm-6">telomere_length</div></div><div class="row"><div class="col-sm-2">inner</div><div class="col-sm-6">age, alcohol_drinking, bmi, bp_category, cigarette_smoking, hr, physical_activity_cohort, rr</div></div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<br>
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link active" id="plainfig-tab" data-bs-toggle="tab" data-bs-target="#plainfig" type="button" role="tab" aria-controls="plainfig" aria-selected="true">Omit covariances and estimates</button>
+		  </li>
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link" id="covfig-tab" data-bs-toggle="tab" data-bs-target="#covfig" type="button" role="tab" aria-controls="covfig" aria-selected="false">Omit covariances</button>
+		  </li>
+		  <li class="nav-item" role="presentation">
+		    <button class="nav-link" id="plainparamfig-tab" data-bs-toggle="tab" data-bs-target="#plainparamfig" type="button" role="tab" aria-controls="plainparamfig" aria-selected="false">Omit estimates</button>
+		  </li>
+		<li class="nav-item" role="presentation">
+		    <button class="nav-link" id="covparamfig-tab" data-bs-toggle="tab" data-bs-target="#covparamfig" type="button" role="tab" aria-controls="covparamfig" aria-selected="false">Show estimates and covariances</button>
+		  </li>
+		</ul>
+		<div class="tab-content" id="myTabContent">
+		  <div class="tab-pane fade show active" id="plainfig" role="tabpanel" aria-labelledby="plainfig-tab"><img src="./plots/1.png" class="img-fluid" alt="Model figure with covariances and estimates omitted"></div>
+		  <div class="tab-pane fade" id="covfig" role="tabpanel" aria-labelledby="covfig-tab"><img src="./plots/2.png" class="img-fluid" alt="Model figure with covariances omitted"></div>
+		  <div class="tab-pane fade" id="plainparamfig" role="tabpanel" aria-labelledby="plainparamfig-tab"><img src="./plots/3.png" class="img-fluid" alt="Model figure with estimates omitted"></div>
+		 <div class="tab-pane fade" id="covparamfig" role="tabpanel" aria-labelledby="covparamfig-tab"><img src="./plots/4.png" class="img-fluid" alt="Model figure"></div>
+		</div>
+		
+	<a class="anchor" id="estimates"></a>
+	<h3>Estimates</h3>
+	<div style="font-family:monospace">
+	<div class="row"><div class='col-sm-2'></div><div class='col-sm-2'></div><div class='col-sm-1'>Estimate</div><div class='col-sm-1'>P-value</div></div><div class='col-sm-2'>Regressions:</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div><div class="row"><div class='col-sm-2 text-end'>telomere_length ~</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>age</div><div class='col-sm-1'>0.035</div><div class='col-sm-1'>0.069</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>cigarette_smoking</div><div class='col-sm-1'>-0.156</div><div class='col-sm-1'>0.763</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>alcohol_drinking</div><div class='col-sm-1'>0.314</div><div class='col-sm-1'>0.450</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>physical_activity_cohort</div><div class='col-sm-1'>-1.020</div><div class='col-sm-1'>0.000</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>bmi</div><div class='col-sm-1'>-0.011</div><div class='col-sm-1'>0.537</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>hr</div><div class='col-sm-1'>-0.041</div><div class='col-sm-1'>0.202</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>rr</div><div class='col-sm-1'>-0.211</div><div class='col-sm-1'>0.228</div></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>bp_category</div><div class='col-sm-1'>0.349</div><div class='col-sm-1'>0.311</div></div><div class='col-sm-2'>Variances:</div><div class='col-sm-2'></div><div class='col-sm-1'></div><div class='col-sm-1'></div><div class="row"><div class='col-sm-2 text-end'></div><div class='col-sm-2'>telomere_length</div><div class='col-sm-1'>64.850</div><div class='col-sm-1'>0.000</div></div>
+	</div>
+	<br>
+	<div class="accordion" id="accordion3">
+	<div class="accordion-item">
+	    <h2 class="accordion-header" id="headingThree">
+	      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+		semopy tabular output
+	      </button>
+	    </h2>	
+	    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordion3">
+	      <div class="accordion-body" style="background-color: #f6f8fa;max-width: 100%;width: 100%">
+		<pre style="font-family: monospace">              lval  op                      rval   Estimate  Std. Err  \
+0  telomere_length   ~                       age   0.034768  0.019143   
+1  telomere_length   ~         cigarette_smoking  -0.155894  0.516934   
+2  telomere_length   ~          alcohol_drinking   0.314204  0.415693   
+3  telomere_length   ~  physical_activity_cohort  -1.019837  0.248164   
+4  telomere_length   ~                       bmi  -0.011494  0.018613   
+5  telomere_length   ~                        hr  -0.040960  0.032082   
+6  telomere_length   ~                        rr  -0.211204  0.175356   
+7  telomere_length   ~               bp_category   0.348823  0.344436   
+8  telomere_length  ~~           telomere_length  64.850071  3.698179   
+
+     z-value   p-value  
+0   1.816220  0.069337  
+1  -0.301574  0.762977  
+2   0.755854  0.449737  
+3  -4.109535  0.000040  
+4  -0.617540  0.536878  
+5  -1.276706  0.201706  
+6  -1.204432  0.228423  
+7   1.012736  0.311186  
+8  17.535678  0.000000  </pre>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<br>
+	<div class="accordion" id="accordion2">
+	<div class="accordion-item">
+	    <h2 class="accordion-header" id="headingTwo">
+	      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+		Optimizer report
+	      </button>
+	    </h2>	
+	    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion2">
+	      <div class="accordion-body" style="background-color: #f6f8fa;max-width: 100%;width: 100%">
+		<pre style="font-family: monospace">Name of objective: WLS
+Optimization method: SLSQP
+Optimization successful.
+Optimization terminated successfully
+Objective value: 0.000
+Number of iterations: 42
+Params: 0.035 -0.156 0.314 -1.020 -0.011 -0.041 -0.211 0.349 64.850</pre>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<a class="anchor" id="indices"></a>
+	<h3>Fit indices</h3>
+	<table class="table"><thead><tr><th scope='col'>DoF</th><th scope='col'>DoF Baseline</th><th scope='col'>chi2</th><th scope='col'>chi2 p-value</th><th scope='col'>chi2 Baseline</th></tr></thead><tbody><tr><td>36.000</td><td>44.000</td><td>0.000</td><td>1.000</td><td>466.391</td></tr></tbody></table><table class="table"><thead><tr><th scope='col'>CFI</th><th scope='col'>GFI</th><th scope='col'>AGFI</th><th scope='col'>NFI</th><th scope='col'>TLI</th></tr></thead><tbody><tr><td>1.085</td><td>1.000</td><td>1.000</td><td>1.000</td><td>1.104</td></tr></tbody></table><table class="table"><thead><tr><th scope='col'>RMSEA</th><th scope='col'>AIC</th><th scope='col'>BIC</th><th scope='col'>LogLik</th></tr></thead><tbody><tr><td>0.000</td><td>18.000</td><td>57.795</td><td>0.000</td></tr></tbody></table>
+	<a class="anchor" id="matrices"></a>
+	<h3>Matrices</h3>
+ 	<center><h4>Covariance matrix</h4></center>
+<ul class="nav nav-tabs" id="cov" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="sample-tab" data-bs-toggle="tab" data-bs-target="#sample"
+type="button" role="tab" aria-controls="sample" aria-selected="true">Sample</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="modelimplied-tab" data-bs-toggle="tab" data-bs-target="#modelimplied"
+type="button" role="tab" aria-controls="modelimplied" aria-selected="false">Model-implied</button>
+</li></ul><div class="tab-content" id="covContent"><div class="tab-pane fade show active" id="sample" role="tabpanel" aria-labelledby="sample-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>telomere_length</th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>telomere_length</th>
+      <td>67.43</td>
+      <td>9.66</td>
+      <td>0.20</td>
+      <td>-3.12</td>
+      <td>0.44</td>
+      <td>0.03</td>
+      <td>-3.46</td>
+      <td>-1.66</td>
+      <td>-0.80</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td>9.66</td>
+      <td>344.20</td>
+      <td>-0.19</td>
+      <td>-0.32</td>
+      <td>6.88</td>
+      <td>1.26</td>
+      <td>1.03</td>
+      <td>3.80</td>
+      <td>2.57</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.20</td>
+      <td>-0.19</td>
+      <td>0.62</td>
+      <td>-0.13</td>
+      <td>-0.01</td>
+      <td>-0.03</td>
+      <td>-0.53</td>
+      <td>0.00</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>-3.12</td>
+      <td>-0.32</td>
+      <td>-0.13</td>
+      <td>307.94</td>
+      <td>1.07</td>
+      <td>-0.41</td>
+      <td>-11.37</td>
+      <td>0.52</td>
+      <td>-0.45</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.44</td>
+      <td>6.88</td>
+      <td>-0.01</td>
+      <td>1.07</td>
+      <td>1.06</td>
+      <td>0.02</td>
+      <td>1.62</td>
+      <td>0.03</td>
+      <td>0.25</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.03</td>
+      <td>1.26</td>
+      <td>-0.03</td>
+      <td>-0.41</td>
+      <td>0.02</td>
+      <td>0.40</td>
+      <td>0.05</td>
+      <td>-0.04</td>
+      <td>-0.03</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>-3.46</td>
+      <td>1.03</td>
+      <td>-0.53</td>
+      <td>-11.37</td>
+      <td>1.62</td>
+      <td>0.05</td>
+      <td>107.81</td>
+      <td>-0.88</td>
+      <td>2.37</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>-1.66</td>
+      <td>3.80</td>
+      <td>0.00</td>
+      <td>0.52</td>
+      <td>0.03</td>
+      <td>-0.04</td>
+      <td>-0.88</td>
+      <td>1.78</td>
+      <td>0.15</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>-0.80</td>
+      <td>2.57</td>
+      <td>0.03</td>
+      <td>-0.45</td>
+      <td>0.25</td>
+      <td>-0.03</td>
+      <td>2.37</td>
+      <td>0.15</td>
+      <td>3.55</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="modelimplied" role="tabpanel" aria-labelledby="modelimplied-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>telomere_length</th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>telomere_length</th>
+      <td>67.44</td>
+      <td>9.66</td>
+      <td>0.20</td>
+      <td>-3.12</td>
+      <td>0.44</td>
+      <td>0.03</td>
+      <td>-3.46</td>
+      <td>-1.66</td>
+      <td>-0.80</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td>9.66</td>
+      <td>344.20</td>
+      <td>-0.19</td>
+      <td>-0.32</td>
+      <td>6.88</td>
+      <td>1.26</td>
+      <td>1.03</td>
+      <td>3.80</td>
+      <td>2.57</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.20</td>
+      <td>-0.19</td>
+      <td>0.62</td>
+      <td>-0.13</td>
+      <td>-0.01</td>
+      <td>-0.03</td>
+      <td>-0.53</td>
+      <td>0.00</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>-3.12</td>
+      <td>-0.32</td>
+      <td>-0.13</td>
+      <td>307.94</td>
+      <td>1.07</td>
+      <td>-0.41</td>
+      <td>-11.37</td>
+      <td>0.52</td>
+      <td>-0.45</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.44</td>
+      <td>6.88</td>
+      <td>-0.01</td>
+      <td>1.07</td>
+      <td>1.06</td>
+      <td>0.02</td>
+      <td>1.62</td>
+      <td>0.03</td>
+      <td>0.25</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.03</td>
+      <td>1.26</td>
+      <td>-0.03</td>
+      <td>-0.41</td>
+      <td>0.02</td>
+      <td>0.40</td>
+      <td>0.05</td>
+      <td>-0.04</td>
+      <td>-0.03</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>-3.46</td>
+      <td>1.03</td>
+      <td>-0.53</td>
+      <td>-11.37</td>
+      <td>1.62</td>
+      <td>0.05</td>
+      <td>107.81</td>
+      <td>-0.88</td>
+      <td>2.37</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>-1.66</td>
+      <td>3.80</td>
+      <td>0.00</td>
+      <td>0.52</td>
+      <td>0.03</td>
+      <td>-0.04</td>
+      <td>-0.88</td>
+      <td>1.78</td>
+      <td>0.15</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>-0.80</td>
+      <td>2.57</td>
+      <td>0.03</td>
+      <td>-0.45</td>
+      <td>0.25</td>
+      <td>-0.03</td>
+      <td>2.37</td>
+      <td>0.15</td>
+      <td>3.55</td>
+    </tr>
+  </tbody>
+</table></div></div><br><center><h4>Model matrices</h4></center><ul class="nav nav-tabs" id="modelmatrices" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="mxBeta-tab" data-bs-toggle="tab" data-bs-target="#mxBeta"
+type="button" role="tab" aria-controls="mxBeta" aria-selected="true">Beta</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="mxLambda-tab" data-bs-toggle="tab" data-bs-target="#mxLambda"
+type="button" role="tab" aria-controls="mxLambda" aria-selected="false">Lambda</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="mxPsi-tab" data-bs-toggle="tab" data-bs-target="#mxPsi"
+type="button" role="tab" aria-controls="mxPsi" aria-selected="false">Psi</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="mxTheta-tab" data-bs-toggle="tab" data-bs-target="#mxTheta"
+type="button" role="tab" aria-controls="mxTheta" aria-selected="false">Theta</button>
+</li></ul><div class="tab-content" id="covContent"><div class="tab-pane fade show active" id="mxBeta" role="tabpanel" aria-labelledby="mxBeta-tab"><ul class="nav nav-tabs" id="Betasub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="BetaEstimates-tab" data-bs-toggle="tab" data-bs-target="#BetaEstimates"
+type="button" role="tab" aria-controls="BetaEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="BetaStart-tab" data-bs-toggle="tab" data-bs-target="#BetaStart"
+type="button" role="tab" aria-controls="BetaStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="BetaNames-tab" data-bs-toggle="tab" data-bs-target="#BetaNames"
+type="button" role="tab" aria-controls="BetaNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Telomere HealthsubContent"><div class="tab-pane fade show active" id="BetaEstimates" role="tabpanel" aria-labelledby="BetaEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>age</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="BetaStart" role="tabpanel" aria-labelledby="BetaStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>age</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="BetaNames" role="tabpanel" aria-labelledby="BetaNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>age</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div></div></div><div class="tab-pane fade " id="mxLambda" role="tabpanel" aria-labelledby="mxLambda-tab"><ul class="nav nav-tabs" id="Lambdasub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="LambdaEstimates-tab" data-bs-toggle="tab" data-bs-target="#LambdaEstimates"
+type="button" role="tab" aria-controls="LambdaEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="LambdaStart-tab" data-bs-toggle="tab" data-bs-target="#LambdaStart"
+type="button" role="tab" aria-controls="LambdaStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="LambdaNames-tab" data-bs-toggle="tab" data-bs-target="#LambdaNames"
+type="button" role="tab" aria-controls="LambdaNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Telomere HealthsubContent"><div class="tab-pane fade show active" id="LambdaEstimates" role="tabpanel" aria-labelledby="LambdaEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>telomere_length</th>
+      <td>0.03</td>
+      <td>0.31</td>
+      <td>-0.01</td>
+      <td>0.35</td>
+      <td>-0.16</td>
+      <td>-0.04</td>
+      <td>-1.02</td>
+      <td>-0.21</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="LambdaStart" role="tabpanel" aria-labelledby="LambdaStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>telomere_length</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="LambdaNames" role="tabpanel" aria-labelledby="LambdaNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>telomere_length</th>
+      <td>_b1</td>
+      <td>_b3</td>
+      <td>_b5</td>
+      <td>_b8</td>
+      <td>_b2</td>
+      <td>_b6</td>
+      <td>_b4</td>
+      <td>_b7</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+    </tr>
+  </tbody>
+</table></div></div></div><div class="tab-pane fade " id="mxPsi" role="tabpanel" aria-labelledby="mxPsi-tab"><ul class="nav nav-tabs" id="Psisub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="PsiEstimates-tab" data-bs-toggle="tab" data-bs-target="#PsiEstimates"
+type="button" role="tab" aria-controls="PsiEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="PsiStart-tab" data-bs-toggle="tab" data-bs-target="#PsiStart"
+type="button" role="tab" aria-controls="PsiStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="PsiNames-tab" data-bs-toggle="tab" data-bs-target="#PsiNames"
+type="button" role="tab" aria-controls="PsiNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Telomere HealthsubContent"><div class="tab-pane fade show active" id="PsiEstimates" role="tabpanel" aria-labelledby="PsiEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>age</th>
+      <td>344.20</td>
+      <td>-0.19</td>
+      <td>-0.32</td>
+      <td>6.88</td>
+      <td>1.26</td>
+      <td>1.03</td>
+      <td>3.80</td>
+      <td>2.57</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>-0.19</td>
+      <td>0.62</td>
+      <td>-0.13</td>
+      <td>-0.01</td>
+      <td>-0.03</td>
+      <td>-0.53</td>
+      <td>0.00</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>-0.32</td>
+      <td>-0.13</td>
+      <td>307.94</td>
+      <td>1.07</td>
+      <td>-0.41</td>
+      <td>-11.37</td>
+      <td>0.52</td>
+      <td>-0.45</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>6.88</td>
+      <td>-0.01</td>
+      <td>1.07</td>
+      <td>1.06</td>
+      <td>0.02</td>
+      <td>1.62</td>
+      <td>0.03</td>
+      <td>0.25</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>1.26</td>
+      <td>-0.03</td>
+      <td>-0.41</td>
+      <td>0.02</td>
+      <td>0.40</td>
+      <td>0.05</td>
+      <td>-0.04</td>
+      <td>-0.03</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>1.03</td>
+      <td>-0.53</td>
+      <td>-11.37</td>
+      <td>1.62</td>
+      <td>0.05</td>
+      <td>107.81</td>
+      <td>-0.88</td>
+      <td>2.37</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>3.80</td>
+      <td>0.00</td>
+      <td>0.52</td>
+      <td>0.03</td>
+      <td>-0.04</td>
+      <td>-0.88</td>
+      <td>1.78</td>
+      <td>0.15</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>2.57</td>
+      <td>0.03</td>
+      <td>-0.45</td>
+      <td>0.25</td>
+      <td>-0.03</td>
+      <td>2.37</td>
+      <td>0.15</td>
+      <td>3.55</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="PsiStart" role="tabpanel" aria-labelledby="PsiStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>age</th>
+      <td>344.20</td>
+      <td>-0.19</td>
+      <td>-0.32</td>
+      <td>6.88</td>
+      <td>1.26</td>
+      <td>1.03</td>
+      <td>3.80</td>
+      <td>2.57</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>-0.19</td>
+      <td>0.62</td>
+      <td>-0.13</td>
+      <td>-0.01</td>
+      <td>-0.03</td>
+      <td>-0.53</td>
+      <td>0.00</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>-0.32</td>
+      <td>-0.13</td>
+      <td>307.94</td>
+      <td>1.07</td>
+      <td>-0.41</td>
+      <td>-11.37</td>
+      <td>0.52</td>
+      <td>-0.45</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>6.88</td>
+      <td>-0.01</td>
+      <td>1.07</td>
+      <td>1.06</td>
+      <td>0.02</td>
+      <td>1.62</td>
+      <td>0.03</td>
+      <td>0.25</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>1.26</td>
+      <td>-0.03</td>
+      <td>-0.41</td>
+      <td>0.02</td>
+      <td>0.40</td>
+      <td>0.05</td>
+      <td>-0.04</td>
+      <td>-0.03</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>1.03</td>
+      <td>-0.53</td>
+      <td>-11.37</td>
+      <td>1.62</td>
+      <td>0.05</td>
+      <td>107.81</td>
+      <td>-0.88</td>
+      <td>2.37</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>3.80</td>
+      <td>0.00</td>
+      <td>0.52</td>
+      <td>0.03</td>
+      <td>-0.04</td>
+      <td>-0.88</td>
+      <td>1.78</td>
+      <td>0.15</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>2.57</td>
+      <td>0.03</td>
+      <td>-0.45</td>
+      <td>0.25</td>
+      <td>-0.03</td>
+      <td>2.37</td>
+      <td>0.15</td>
+      <td>3.55</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="PsiNames" role="tabpanel" aria-labelledby="PsiNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>age</th>
+      <td>_c1</td>
+      <td>_c2</td>
+      <td>_c3</td>
+      <td>_c4</td>
+      <td>_c5</td>
+      <td>_c6</td>
+      <td>_c7</td>
+      <td>_c8</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>_c2</td>
+      <td>_c9</td>
+      <td>_c12</td>
+      <td>_c17</td>
+      <td>_c20</td>
+      <td>_c10</td>
+      <td>_c25</td>
+      <td>_c31</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>_c3</td>
+      <td>_c12</td>
+      <td>_c11</td>
+      <td>_c13</td>
+      <td>_c14</td>
+      <td>_c15</td>
+      <td>_c26</td>
+      <td>_c32</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>_c4</td>
+      <td>_c17</td>
+      <td>_c13</td>
+      <td>_c16</td>
+      <td>_c21</td>
+      <td>_c18</td>
+      <td>_c27</td>
+      <td>_c33</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>_c5</td>
+      <td>_c20</td>
+      <td>_c14</td>
+      <td>_c21</td>
+      <td>_c19</td>
+      <td>_c22</td>
+      <td>_c28</td>
+      <td>_c34</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>_c6</td>
+      <td>_c10</td>
+      <td>_c15</td>
+      <td>_c18</td>
+      <td>_c22</td>
+      <td>_c23</td>
+      <td>_c29</td>
+      <td>_c35</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>_c7</td>
+      <td>_c25</td>
+      <td>_c26</td>
+      <td>_c27</td>
+      <td>_c28</td>
+      <td>_c29</td>
+      <td>_c24</td>
+      <td>_c36</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>_c8</td>
+      <td>_c31</td>
+      <td>_c32</td>
+      <td>_c33</td>
+      <td>_c34</td>
+      <td>_c35</td>
+      <td>_c36</td>
+      <td>_c30</td>
+    </tr>
+  </tbody>
+</table></div></div></div><div class="tab-pane fade " id="mxTheta" role="tabpanel" aria-labelledby="mxTheta-tab"><ul class="nav nav-tabs" id="Thetasub" role="tablist"><li class="nav-item" role="presentation">
+<button class="nav-link active" id="ThetaEstimates-tab" data-bs-toggle="tab" data-bs-target="#ThetaEstimates"
+type="button" role="tab" aria-controls="ThetaEstimates" aria-selected="true">Estimates</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="ThetaStart-tab" data-bs-toggle="tab" data-bs-target="#ThetaStart"
+type="button" role="tab" aria-controls="ThetaStart" aria-selected="false">Start</button>
+</li><li class="nav-item" role="presentation">
+<button class="nav-link " id="ThetaNames-tab" data-bs-toggle="tab" data-bs-target="#ThetaNames"
+type="button" role="tab" aria-controls="ThetaNames" aria-selected="false">Names</button>
+</li></ul><div class="tab-content" id="Telomere HealthsubContent"><div class="tab-pane fade show active" id="ThetaEstimates" role="tabpanel" aria-labelledby="ThetaEstimates-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>telomere_length</th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>telomere_length</th>
+      <td>64.85</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="ThetaStart" role="tabpanel" aria-labelledby="ThetaStart-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>telomere_length</th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>telomere_length</th>
+      <td>33.72</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div><div class="tab-pane fade " id="ThetaNames" role="tabpanel" aria-labelledby="ThetaNames-tab"><table border="1" class="dataframe table table-bordered">
+  <thead>
+    <tr style="text-align: center;">
+      <th></th>
+      <th>telomere_length</th>
+      <th>age</th>
+      <th>alcohol_drinking</th>
+      <th>bmi</th>
+      <th>bp_category</th>
+      <th>cigarette_smoking</th>
+      <th>hr</th>
+      <th>physical_activity_cohort</th>
+      <th>rr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>telomere_length</th>
+      <td>_c37</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>alcohol_drinking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bmi</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>bp_category</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>cigarette_smoking</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>hr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>physical_activity_cohort</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>rr</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table></div></div></div></div>
+    </div>
+   </div>
+  </div>
+</div>
+<footer class="footer">
+      <div class="container">
+	<br>
+	<center>
+        <span class="text-muted">Generated by <a href="https://semopy.com"><b>semopy</b></a> v. 2.3.11.</span>
+	</center>
+      </div>
+    </footer>
+</body>
+<script>
+const menus = [document.getElementById("model_m"), document.getElementById("estimates_m"), document.getElementById("indices_m"), document.getElementById("matrices_m")];
+const headers = [document.getElementById("model"), document.getElementById("estimates"), document.getElementById("indices"), document.getElementById("matrices")];
+var cur = menus[0];
+cur.classList.add('active');
+window.addEventListener("scroll", function() {
+  headers.forEach(function(item, index, array) {
+    if (window.scrollY >= (item.offsetTop - 1.05 * item.offsetHeight)) {
+        item = menus[index];
+        cur.classList.remove("active");
+        cur = item;
+        cur.classList.add("active");
+  }
+});
+});
+</script>
+
+</html>
