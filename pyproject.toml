@@ -1,0 +1,18 @@
+[project]
+name = "telomere-health-geography"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "colorama>=0.4.6",
+    "ipykernel>=6.29.5",
+    "jinja2>=3.1.6",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.10.1",
+    "pandas>=2.2.3",
+    "scikit-learn>=1.6.1",
+    "semopy>=2.3.11",
+    "shap>=0.47.2",
+    "xgboost>=3.0.0",
+]
